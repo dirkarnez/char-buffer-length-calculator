@@ -1,6 +1,7 @@
 char-buffer-length-calculator
 =============================
 `int size = snprintf(NULL, 0, "Name: %s, Age: %d", MAX, MAX);`
+`"User \"ID:%d\" \nLoad: 85%%\n".replaceAll("%d", "-2147483648")`
 
 | Specifier | Used For                 | Example Type  |
 |-----------|--------------------------|---------------|
