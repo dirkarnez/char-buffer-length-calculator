@@ -3,10 +3,13 @@
 #include <string>
 #include <regex>
 #include <vector>
+#include <format>
 #include <limits> // Required header
 
-#include <emscripten/bind.h>
-using namespace emscripten;
+#ifdef __EMSCRIPTEN__
+    #include <emscripten/bind.h>
+    using namespace emscripten;
+#endif
 
 // em++ -O3 -fwasm-exceptions main.cpp -o main.js
 int get_buffer_length(std::string buffer) {
@@ -31,12 +34,11 @@ int get_buffer_length(std::string buffer) {
         if (index < replacements.size()) {
             if (match.str() == "%d")
             {
-                int max_val = std::numeric_limits<int>::max();
-                int min_val = std::numeric_limits<int>::min();
-                result += 
+                std::string max_val_str = std::format("{}", std::numeric_limits<int>::max());
+                std::string min_val_str = std::format("{}", std::numeric_limits<int>::min());
+                result += max_val_str.length() > min_val_str.length() ? max_val_str : min_val_str;
             } else if (match.str() == "%s")
             {
-                
                 // TODO: needs specified length
             }
             
@@ -54,9 +56,16 @@ int get_buffer_length(std::string buffer) {
     return std::snprintf(NULL, 0, result.c_str());
 }
 
+#ifdef __EMSCRIPTEN__
 EMSCRIPTEN_BINDINGS(my_module) {
     function("get_buffer_length", &get_buffer_length);
 }
+#else
+int main()
+{
+    
+}
+#endif
 
 
 
