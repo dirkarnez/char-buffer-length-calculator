@@ -8,6 +8,7 @@
 #include <emscripten/bind.h>
 using namespace emscripten;
 
+// em++ -O3 -fwasm-exceptions main.cpp -o main.js
 int get_buffer_length(std::string buffer) {
     // 假設我們要將所有 "X" 依序替換。
     // 注意：我們的替換值裡面故意包含了 "X" 本身（例如 "X-One"）
