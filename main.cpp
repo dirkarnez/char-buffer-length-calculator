@@ -12,10 +12,9 @@
 #endif
 
 // em++ -O3 -fwasm-exceptions main.cpp -o main.js
-int get_buffer_length(std::string buffer) {
+int get_buffer_length(std::string text) {
     // 假設我們要將所有 "X" 依序替換。
     // 注意：我們的替換值裡面故意包含了 "X" 本身（例如 "X-One"）
-    std::string text = "%";
     std::regex pattern("%");
     
     size_t index = 0;
@@ -28,12 +27,13 @@ int get_buffer_length(std::string buffer) {
     while (std::regex_search(current, match, pattern)) {
         // 1. 將匹配位置之前的文字複製到結果中
         result += match.prefix().str();
-        
+        std::cout << match.str();
         //  is %d
         // 2. 放入新的替換值（即使這個值含有 'X'，它也只會待在 result 裡，不會被再次搜尋）
-        if (index < replacements.size()) {
+        // if (index < replacements.size()) {
             if (match.str() == "%d")
             {
+                std::cout << "!!!!!";
                 std::string max_val_str = std::format("{}", std::numeric_limits<int>::max());
                 std::string min_val_str = std::format("{}", std::numeric_limits<int>::min());
                 result += max_val_str.length() > min_val_str.length() ? max_val_str : min_val_str;
@@ -43,9 +43,9 @@ int get_buffer_length(std::string buffer) {
             }
             
             
-        } else {
-            result += match.str(); // 沒替換值了就保持原樣
-        }
+        // } else {
+        //     result += match.str(); // 沒替換值了就保持原樣
+        // }
         
         // 3. 關鍵：把已經處理過的部分（包括剛才匹配到的 X）從 current 中「切掉」
         current = match.suffix().str();
@@ -63,10 +63,9 @@ EMSCRIPTEN_BINDINGS(my_module) {
 #else
 int main()
 {
-    
+    std::cout << get_buffer_length("%d");
 }
 #endif
-
 
 
 
